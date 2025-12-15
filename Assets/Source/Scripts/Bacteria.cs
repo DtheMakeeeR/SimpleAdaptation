@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bacteria : MonoBehaviour
@@ -9,6 +10,7 @@ public class Bacteria : MonoBehaviour
     [SerializeField]
     private Color color;
     private SpriteRenderer spriteRenderer;
+    public static float BornTime;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
@@ -32,5 +34,19 @@ public class Bacteria : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator BornCoroutine()
+    {
+        yield return new WaitForSeconds(BornTime);
+        BornChild();
+        yield return BornCoroutine();
+    }
+
+    private void BornChild()
+    {
+        Bacteria child = GameManager.BacteriaPool.Get();
+        child.speed = speed;
+        child.direction = direction;
     }
 }

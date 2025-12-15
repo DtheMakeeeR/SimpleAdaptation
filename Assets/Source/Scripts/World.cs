@@ -9,8 +9,6 @@ public class World : MonoBehaviour
     private Vector2 direction;
     [SerializeField]
     private float coolDown;
-    public float BornTime;
-    public float BacteriaCoefficent;
     public float WorldCoefficent;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private Coroutine coroutine;
