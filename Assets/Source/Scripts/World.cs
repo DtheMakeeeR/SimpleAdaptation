@@ -6,7 +6,7 @@ public class World : MonoBehaviour
     [SerializeField]
     private float speed;
     [SerializeField]
-    private Vector2 direction;
+    private Vector2 direction = new Vector2(0, 1);
     [SerializeField]
     private float coolDown;
     public float WorldCoefficent;
@@ -29,12 +29,8 @@ public class World : MonoBehaviour
     {
         Debug.Log("Change");
         yield return new WaitForSeconds(coolDown);
-        int speedSign = Random.value >= 0.5 ? 1 : -1;
-        int rotSign = Random.value >= 0.5 ? 1 : -1;
-        Debug.Log($"speedSign: {speedSign}");
-        Debug.Log($"rotSign: {rotSign}");
-        speed = speed + speed*WorldCoefficent*speedSign;
-        direction = Random.onUnitSphere;
+        speed = MyGenerator.GenerateSpeed(speed, WorldCoefficent);
+        direction = MyGenerator.GenerateDirection(direction, WorldCoefficent);
         coroutine = null;
     }
 }
