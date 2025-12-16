@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class Bacteria : MonoBehaviour
@@ -17,17 +18,20 @@ public class Bacteria : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    void Start()
-    {
-        StartCoroutine(BornCoroutine());
-    }
-
     void Update()
     {
         Vector2 vector = direction.normalized * speed * Time.deltaTime;
         transform.position = transform.position + new Vector3(vector.x, vector.y, 0);
     }
-
+    private void FixedUpdate()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.05f);
+        bool hasWorldObjects = colliders.Any(c => c.tag == "World");
+        if (!hasWorldObjects)
+        {
+            GameManager.BacteriaPool.Release(this);
+        }
+    }
     IEnumerator BornCoroutine()
     {
         while (true)
@@ -43,21 +47,14 @@ public class Bacteria : MonoBehaviour
         child.gameObject.transform.rotation= transform.rotation;
         float tmpf = MyGenerator.GenerateSpeed(speed, BacteriaCoeff);
         child.speed = tmpf;
-        Debug.Log($"Generated speed {tmpf}");
         Vector2 tmpv = MyGenerator.GenerateDirection(direction, BacteriaCoeff);
-        Debug.Log($"Generated vector {tmpv}");
         child.direction = tmpv;
     }
 
-    
 
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnEnable()
     {
-        Debug.Log("TriggerExit");
-        if (collision.gameObject.tag == "World")
-        {
-            gameObject.SetActive(false);
-        }
+        StartCoroutine(BornCoroutine());
     }
     private void OnDisable()
     {

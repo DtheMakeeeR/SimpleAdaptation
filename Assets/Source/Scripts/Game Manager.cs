@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
+using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static ObjectPool<Bacteria> BacteriaPool;
@@ -18,6 +19,12 @@ public class GameManager : MonoBehaviour
     private int baseSize = 100;
     [SerializeField]
     private int maxSize = 10000;
+    private int aliveBacterias = 0;
+    [SerializeField]
+    private TMP_Text TextCount;
+    [SerializeField]
+    private TMP_Text TextBactCoeff;
+
     private void Awake()
     {
         BacteriaPool = new ObjectPool<Bacteria>(
@@ -31,6 +38,7 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        TextBactCoeff.text = Bacteria.BacteriaCoeff.ToString();
         CreatePopulation();
     }
     Bacteria OnCreatePool()
@@ -44,6 +52,8 @@ public class GameManager : MonoBehaviour
     {
         obj.name = "getted bacteria";
         obj.gameObject.SetActive(true);
+        aliveBacterias++;
+        TextCount.text = aliveBacterias.ToString();
     }
     void OnReleasePool(Bacteria obj)
     {
@@ -51,6 +61,10 @@ public class GameManager : MonoBehaviour
         obj.gameObject.SetActive(false);
         obj.transform.position = transform.position;
         obj.transform.rotation = Quaternion.identity;
+        Debug.Log($"Bacterias before decrement: {aliveBacterias}");
+        aliveBacterias--;
+        Debug.Log($"Bacterias after decrement: {aliveBacterias}");
+        TextCount.text = aliveBacterias.ToString();
     }
     void OnDestroyPool(Bacteria obj)
     {
