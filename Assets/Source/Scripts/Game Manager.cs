@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
+using System;
 using TMPro;
 public class GameManager : MonoBehaviour
 {
@@ -9,10 +10,6 @@ public class GameManager : MonoBehaviour
     private Bacteria BacteriaPrefab;
     [SerializeField]
     private World WorldPrefab;
-    [SerializeField]
-    private Vector2 BaseDirection = new Vector2(0, 1);
-    [SerializeField]
-    private float BaseSpeed = 3f;
     [SerializeField]
     private bool collectionCheck = true;
     [SerializeField]
@@ -24,6 +21,8 @@ public class GameManager : MonoBehaviour
     private TMP_Text TextCount;
     [SerializeField]
     private TMP_Text TextBactCoeff;
+    [SerializeField]
+    private TMP_Text TextWorldCoeff;
 
     private void Awake()
     {
@@ -39,13 +38,12 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         TextBactCoeff.text = Bacteria.BacteriaCoeff.ToString();
-        CreatePopulation();
+        TextWorldCoeff.text = WorldPrefab.WorldCoefficent.ToString();
+        CreatePopulation(baseSize);
     }
     Bacteria OnCreatePool()
     {
         Bacteria tmp = Instantiate(BacteriaPrefab, transform.position, Quaternion.identity);
-        tmp.speed = MyGenerator.GenerateSpeed(BaseSpeed, Bacteria.BacteriaCoeff);
-        tmp.direction = MyGenerator.GenerateDirection(BaseDirection, Bacteria.BacteriaCoeff);
         return tmp;
     }
     void OnGetPool(Bacteria obj)
@@ -71,14 +69,28 @@ public class GameManager : MonoBehaviour
         obj.name = "destroyed bacteria";
         Destroy(obj.gameObject);
     }
-    void CreatePopulation()
+    public void CreatePopulation(int count)
     {
-        for(int i=0; i < baseSize; i++)
+        for(int i=0; i < count; i++)
         {
             Debug.Log($"I : {i}");
             Bacteria tmp = BacteriaPool.Get();
-            Vector3 dir = Random.onUnitSphere * 0.25f;
+            tmp.speed = MyGenerator.GenerateSpeed(WorldPrefab.speed, Bacteria.BacteriaCoeff);
+            tmp.direction = MyGenerator.GenerateDirection(WorldPrefab.direction, Bacteria.BacteriaCoeff);
+            Vector3 dir = UnityEngine.Random.onUnitSphere * 0.25f;
             tmp.gameObject.transform.position = dir + WorldPrefab.transform.position;
         }
+    }
+    public void ChangeBacteriaCoeff(float value)
+    {
+        value = (float)Math.Round(value, 2);
+        Bacteria.BacteriaCoeff = value;
+        TextBactCoeff.text = Bacteria.BacteriaCoeff.ToString();
+    }
+    public void ChangeWorldCoeff(float value)
+    {
+        value = (float)Math.Round(value, 2);
+        WorldPrefab.WorldCoefficent = value;
+        TextWorldCoeff.text = WorldPrefab.WorldCoefficent.ToString();
     }
 }

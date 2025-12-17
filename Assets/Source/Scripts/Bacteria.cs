@@ -11,7 +11,7 @@ public class Bacteria : MonoBehaviour
     [SerializeField]
     private Color color;
     private SpriteRenderer spriteRenderer;
-    public static float BornTime = 2.5f;
+    public static float BornTime = 1f;
     public static float BacteriaCoeff = 0.25f;
 
     private void Awake()

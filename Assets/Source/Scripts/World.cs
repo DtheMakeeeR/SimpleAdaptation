@@ -4,9 +4,9 @@ using UnityEngine;
 public class World : MonoBehaviour
 {
     [SerializeField]
-    private float speed;
+    public float speed;
     [SerializeField]
-    private Vector2 direction = new Vector2(0, 1);
+    public Vector2 direction = new Vector2(0, 1);
     [SerializeField]
     private float coolDown;
     public float WorldCoefficent;
