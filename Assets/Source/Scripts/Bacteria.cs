@@ -11,7 +11,7 @@ public class Bacteria : MonoBehaviour
     [SerializeField]
     private Color color;
     private SpriteRenderer spriteRenderer;
-    public static float BornTime = 1f;
+    public static float BirthRate = 1f;
     public static float BacteriaCoeff = 0.25f;
 
     private void Awake()
@@ -36,7 +36,7 @@ public class Bacteria : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(BornTime);
+            yield return new WaitForSeconds(BirthRate);
             BornChild();
         }
     }

@@ -23,6 +23,12 @@ public class GameManager : MonoBehaviour
     private TMP_Text TextBactCoeff;
     [SerializeField]
     private TMP_Text TextWorldCoeff;
+    [SerializeField]
+    private TMP_Text TextBirthRate;
+    [SerializeField]
+    private TMP_Text TextChangeRate;
+    //[SerializeField]
+    //private TMP_InputField InputBirthRate;
 
     private void Awake()
     {
@@ -39,6 +45,8 @@ public class GameManager : MonoBehaviour
     {
         TextBactCoeff.text = Bacteria.BacteriaCoeff.ToString();
         TextWorldCoeff.text = WorldPrefab.WorldCoefficent.ToString();
+        TextBirthRate.text = Bacteria.BirthRate.ToString();
+        TextChangeRate.text = WorldPrefab.ChangeRate.ToString();
         CreatePopulation(baseSize);
     }
     Bacteria OnCreatePool()
@@ -59,9 +67,7 @@ public class GameManager : MonoBehaviour
         obj.gameObject.SetActive(false);
         obj.transform.position = transform.position;
         obj.transform.rotation = Quaternion.identity;
-        Debug.Log($"Bacterias before decrement: {aliveBacterias}");
         aliveBacterias--;
-        Debug.Log($"Bacterias after decrement: {aliveBacterias}");
         TextCount.text = aliveBacterias.ToString();
     }
     void OnDestroyPool(Bacteria obj)
@@ -81,16 +87,31 @@ public class GameManager : MonoBehaviour
             tmp.gameObject.transform.position = dir + WorldPrefab.transform.position;
         }
     }
-    public void ChangeBacteriaCoeff(float value)
+    public void SetBacteriaCoeff(float value)
     {
         value = (float)Math.Round(value, 2);
         Bacteria.BacteriaCoeff = value;
         TextBactCoeff.text = Bacteria.BacteriaCoeff.ToString();
     }
-    public void ChangeWorldCoeff(float value)
+    public void SetWorldCoeff(float value)
     {
         value = (float)Math.Round(value, 2);
         WorldPrefab.WorldCoefficent = value;
         TextWorldCoeff.text = WorldPrefab.WorldCoefficent.ToString();
     }
+    public void SetBirthRate(string value)
+    {
+        float tmp = float.Parse(value);
+        if (tmp < 0) return;
+        Bacteria.BirthRate = tmp;
+        TextBirthRate.text = Bacteria.BirthRate.ToString();
+    }
+    public void SetChangeRate(string value)
+    {
+        float tmp = float.Parse(value);
+        if (tmp < 0) return;
+        WorldPrefab.ChangeRate = tmp;
+        TextChangeRate.text = WorldPrefab.ChangeRate.ToString();
+    }
+    
 }
